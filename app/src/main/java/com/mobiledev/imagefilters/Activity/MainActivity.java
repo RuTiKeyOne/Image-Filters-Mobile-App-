@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
+import com.mobiledev.imagefilters.Activity.EditImageActivity;
 import com.mobiledev.imagefilters.R;
 import com.mobiledev.imagefilters.databinding.ActivityMainBinding;
 
@@ -15,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding mainBinding;
     private final int REQUEST_CODE_PICK_IMAGE = 1;
-    private final String KEY_IMAGE_URI = "imageUri";
+    public static final String KEY_IMAGE_URI = "imageUri";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +35,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setEditNewImageListener(){
         mainBinding.editNewImageBtn.setOnClickListener(v -> {
-            Intent piclerIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            piclerIntent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
-            startActivityForResult(piclerIntent, REQUEST_CODE_PICK_IMAGE);
+            Intent pickerIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            pickerIntent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+            startActivityForResult(pickerIntent, REQUEST_CODE_PICK_IMAGE);
         });
     }
 
