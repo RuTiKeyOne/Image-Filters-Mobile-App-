@@ -11,8 +11,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_margin="2dp">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/imageFilterPreview"
@@ -31,6 +30,7 @@
         <TextView
             android:id="@+id/textFilterName"
             android:layout_width="0dp"
+            android:textAllCaps="true"
             android:layout_height="wrap_content"
             android:background="#90000000"
             android:gravity="center"

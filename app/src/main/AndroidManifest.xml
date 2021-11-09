@@ -11,7 +11,8 @@
         android:theme="@style/Theme.ImageFilters">
         <activity
             android:name=".Activity.EditImageActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activity.MainActivity"
             android:exported="true"
