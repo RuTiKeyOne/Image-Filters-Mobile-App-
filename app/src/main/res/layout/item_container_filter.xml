@@ -1,34 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/_8sdp"
-    android:layout_marginLeft="@dimen/_8sdp">
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
 
-    <com.makeramen.roundedimageview.RoundedImageView
-        android:id="@+id/imageFilterPreview"
-        android:layout_width="@dimen/_70sdp"
-        android:layout_height="@dimen/_70sdp"
-        android:src="@drawable/image_place_holder"
-        app:riv_corner_radius="@dimen/_8sdp"
-        android:scaleType="centerCrop"/>
+    </data>
 
-    <TextView
-        android:id="@+id/textFilterName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_4sdp"
-        android:ellipsize="end"
-        android:fontFamily="@font/poppins_regular"
-        android:gravity="center"
-        android:includeFontPadding="false"
-        android:maxLines="1"
-        android:textColor="@color/primaryText"
-        android:textSize="@dimen/_12ssp"
-        tools:text="Filter 1"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="2dp">
 
-</LinearLayout>
+        <ImageView
+            android:id="@+id/imageFilterPreview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="h,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.501"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <TextView
+            android:id="@+id/textFilterName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#90000000"
+            android:gravity="center"
+            android:padding="4dp"
+            android:textColor="@android:color/white"
+            android:textSize="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageFilterPreview"
+            app:layout_constraintEnd_toEndOf="@+id/imageFilterPreview"
+            app:layout_constraintStart_toStartOf="@+id/imageFilterPreview"
+            tools:text="@tools:sample/full_names" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -28,7 +28,6 @@ public class EditImageRepositoryImp implements EditImageRepository {
 
     private InputStream getInputStreamFromTry(Uri uri){
         try {
-            Log.d("log", "log");
            return getInputStreamFromUri(uri);
         } catch (FileNotFoundException e) {
             return null;

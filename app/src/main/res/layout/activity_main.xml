@@ -64,24 +64,9 @@
             android:layout_marginBottom="@dimen/_4sdp"
             android:textSize="@dimen/_12ssp"
             android:fontFamily="@font/poppins_semibold"
-            app:layout_constraintBottom_toTopOf="@id/savedImageBtn"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:backgroundTint="@color/buttonEditNewImage"/>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/savedImageBtn"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_45sdp"
-            android:textColor="@color/white"
-            android:text="@string/saved_images"
-            app:cornerRadius="@dimen/_10sdp"
-            android:includeFontPadding="false"
-            android:layout_marginStart="@dimen/_12sdp"
-            android:layout_marginEnd="@dimen/_12sdp"
-            android:layout_marginBottom="@dimen/_12sdp"
-            android:textSize="@dimen/_12ssp"
-            android:fontFamily="@font/poppins_semibold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:backgroundTint="@color/buttonSavedImages"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

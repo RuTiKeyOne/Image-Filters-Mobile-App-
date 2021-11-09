@@ -29,6 +29,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    ndkVersion '23.1.7779620'
 }
 
 dependencies {
@@ -47,11 +48,8 @@ dependencies {
     //Routed Image View
     implementation 'com.makeramen:roundedimageview:2.3.0'
 
-    //GPU Image
-    implementation 'jp.co.cyberagent.android:gpuimage:2.1.0'
-
-    //Koin
-    implementation "org.koin:koin-android-viewmodel:2.0.0"
+    //Android Photo Filter
+    implementation 'com.burhanrashid52:photoeditor:1.5.1'
 
     //ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
