@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="name"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,8 +25,8 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.501"
-            tools:src="@tools:sample/backgrounds/scenic" />
+            app:layout_constraintVertical_bias="0.501" />
+
 
         <TextView
             android:id="@+id/textFilterName"
@@ -34,7 +36,8 @@
             android:gravity="center"
             android:padding="4dp"
             android:textColor="@android:color/white"
-            android:textSize="8dp"
+            android:textSize="@dimen/_8ssp"
+            android:text="@{name}"
             app:layout_constraintBottom_toBottomOf="@+id/imageFilterPreview"
             app:layout_constraintEnd_toEndOf="@+id/imageFilterPreview"
             app:layout_constraintStart_toStartOf="@+id/imageFilterPreview"

@@ -10,7 +10,9 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 
+import com.mobiledev.imagefilters.Adapter.FilterViewAdapter;
 import com.mobiledev.imagefilters.Interfaces.FilterListener;
+import com.mobiledev.imagefilters.Model.Filter;
 import com.mobiledev.imagefilters.Model.FilterData;
 import com.mobiledev.imagefilters.R;
 import com.mobiledev.imagefilters.ViewModels.EditViewModel;
@@ -27,7 +29,8 @@ public class EditImageActivity extends AppCompatActivity implements FilterListen
 
     private ActivityEditImageBinding editBinding;
     private EditViewModel editViewModel;
-    private static List<Pair<String, PhotoFilter>> photoFilters = new ArrayList<>();
+    private static List<Filter> photoFilters = new ArrayList<>();
+    private FilterViewAdapter filterViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +45,13 @@ public class EditImageActivity extends AppCompatActivity implements FilterListen
     private void initializationComponents() {
         editViewModel = new ViewModelProvider(this).get(EditViewModel.class);
         photoFilters = FilterData.getPhotoFilters();
+        filterViewAdapter = new FilterViewAdapter(this, photoFilters);
     }
 
     private void initializationComponentsView() {
         editBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit_image);
         editBinding.setIsLoading(true);
+        editBinding.filtersRecycleView.setAdapter(filterViewAdapter);
     }
 
     private void setButtonsListener() {
