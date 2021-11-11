@@ -1,7 +1,4 @@
-
 package com.mobiledev.imagefilters.Model;
-
-import com.mobiledev.imagefilters.R;
 
 import ja.burhanrashid52.photoeditor.PhotoFilter;
 

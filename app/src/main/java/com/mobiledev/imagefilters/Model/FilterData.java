@@ -1,12 +1,8 @@
 package com.mobiledev.imagefilters.Model;
 
-import android.util.Pair;
-
 import com.mobiledev.imagefilters.R;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import ja.burhanrashid52.photoeditor.PhotoFilter;
 
 public class FilterData {

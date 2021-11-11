@@ -1,41 +1,22 @@
 package com.mobiledev.imagefilters.Helper;
 
 import android.annotation.SuppressLint;
-import android.content.ContentResolver;
-import android.content.ContentValues;
+import android.content.*;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.util.Log;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleObserver;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
+import androidx.lifecycle.*;
 import androidx.lifecycle.OnLifecycleEvent;
+import com.mobiledev.imagefilters.Interfaces.OnFileCreateResult;
+import com.mobiledev.imagefilters.Model.FileMeta;
+import java.io.*;
+import java.util.concurrent.*;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-/**
- * General contract of this class is to
- * create a file on a device.
- * </br>
- * How to Use it-
- * Call {@linkplain FileSaveHelper#createFile(String, OnFileCreateResult)}
- * if file is created you would receive it's file path and Uri
- * and after you are done with File call {@linkplain FileSaveHelper#notifyThatFileIsNowPubliclyAvailable(ContentResolver)}
- * </br>
- * Remember! in order to shutdown executor call {@linkplain FileSaveHelper#addObserver(LifecycleOwner)} or
- * create object with the {@linkplain FileSaveHelper#FileSaveHelper(AppCompatActivity)}
- */
 public class FileSaveHelper implements LifecycleObserver {
-    private final ContentResolver mContentResolver;
+    private final ContentResolver contentResolver;
     private final ExecutorService executor;
     private final MutableLiveData<FileMeta> fileCreatedResult;
     private OnFileCreateResult resultListener;
@@ -48,9 +29,8 @@ public class FileSaveHelper implements LifecycleObserver {
         }
     };
 
-
     public FileSaveHelper(ContentResolver contentResolver) {
-        mContentResolver = contentResolver;
+        this.contentResolver = contentResolver;
         executor = Executors.newSingleThreadExecutor();
         fileCreatedResult = new MutableLiveData<>();
     }
@@ -76,16 +56,6 @@ public class FileSaveHelper implements LifecycleObserver {
         return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q);
     }
 
-
-    /**
-     * The effects of this method are
-     * 1- insert new Image File data in MediaStore.Images column
-     * 2- create File on Disk.
-     *
-     * @param fileNameToSave fileName
-     * @param listener       result listener
-     */
-
     public void createFile(final String fileNameToSave, OnFileCreateResult listener) {
         this.resultListener = listener;
         executor.submit(() -> {
@@ -110,7 +80,7 @@ public class FileSaveHelper implements LifecycleObserver {
 
     private String getFilePath(Cursor cursor, Uri editedImageUri) {
         String[] proj = {MediaStore.Images.Media.DATA};
-        cursor = mContentResolver.query(editedImageUri, proj, null, null, null);
+        cursor = contentResolver.query(editedImageUri, proj, null, null, null);
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();
         return cursor.getString(column_index);
@@ -118,15 +88,15 @@ public class FileSaveHelper implements LifecycleObserver {
 
     private Uri getEditedImageUri(String fileNameToSave, ContentValues newImageDetails, Uri imageCollection) throws IOException {
         newImageDetails.put(MediaStore.Images.Media.DISPLAY_NAME, fileNameToSave);
-        final Uri editedImageUri = mContentResolver.insert(imageCollection, newImageDetails);
-        final OutputStream outputStream = mContentResolver.openOutputStream(editedImageUri);
+        final Uri editedImageUri = contentResolver.insert(imageCollection, newImageDetails);
+        final OutputStream outputStream = contentResolver.openOutputStream(editedImageUri);
         outputStream.close();
         return editedImageUri;
     }
 
     @SuppressLint("InlinedApi")
     private Uri buildUriCollection(ContentValues newImageDetails) {
-        Uri imageCollection;
+        Uri imageCollection = null;
         if (isSdkHigherThan28()) {
             imageCollection = MediaStore.Images.Media.getContentUri(
                     MediaStore.VOLUME_EXTERNAL_PRIMARY
@@ -138,46 +108,23 @@ public class FileSaveHelper implements LifecycleObserver {
         return imageCollection;
     }
 
+
     @SuppressLint("InlinedApi")
     public void notifyThatFileIsNowPubliclyAvailable(ContentResolver contentResolver) {
         if (isSdkHigherThan28()) {
             executor.submit(() -> {
-                FileMeta value = fileCreatedResult.getValue();
-                if (value != null) {
-                    value.imageDetails.clear();
-                    value.imageDetails.put(MediaStore.Images.Media.IS_PENDING, 0);
-                    contentResolver.update(value.uri, value.imageDetails, null, null);
-                }
+                updateContentResolver();
             });
         }
     }
 
-    private static class FileMeta {
-        public ContentValues imageDetails;
-        public boolean isCreated;
-        public String filePath;
-        public Uri uri;
-        public String error;
-
-        public FileMeta(boolean isCreated, String filePath,
-                        Uri uri, String error,
-                        ContentValues newImageDetails) {
-            this.isCreated = isCreated;
-            this.filePath = filePath;
-            this.uri = uri;
-            this.error = error;
-            this.imageDetails = newImageDetails;
+    private void updateContentResolver() {
+        FileMeta value = fileCreatedResult.getValue();
+        if (value != null) {
+            value.imageDetails.clear();
+            value.imageDetails.put(MediaStore.Images.Media.IS_PENDING, 0);
+            contentResolver.update(value.uri, value.imageDetails, null, null);
         }
-    }
-
-    public interface OnFileCreateResult {
-        /**
-         * @param created  whether file creation is success or failure
-         * @param filePath filepath on disk. null in case of failure
-         * @param error    in case file creation is failed . it would represent the cause
-         * @param Uri      Uri to the newly created file. null in case of failure
-         */
-        void onFileCreateResult(boolean created, String filePath, String error, Uri Uri);
     }
 
     private void updateResult(boolean result, String filePath, String error, Uri uri, ContentValues newImageDetails) {

@@ -1,20 +1,14 @@
 package com.mobiledev.imagefilters.Adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.mobiledev.imagefilters.Interfaces.FilterListener;
 import com.mobiledev.imagefilters.Model.Filter;
 import com.mobiledev.imagefilters.R;
 import com.mobiledev.imagefilters.databinding.ItemContainerFilterBinding;
-
 import java.util.List;
 
 public class FilterViewAdapter extends RecyclerView.Adapter<FilterViewAdapter.FilterViewHolder> {

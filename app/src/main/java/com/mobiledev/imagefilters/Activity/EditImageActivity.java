@@ -1,9 +1,7 @@
 package com.mobiledev.imagefilters.Activity;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-
 import static com.mobiledev.imagefilters.Helper.FileSaveHelper.isSdkHigherThan28;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
@@ -23,6 +21,7 @@ import com.mobiledev.imagefilters.Model.*;
 import com.mobiledev.imagefilters.R;
 import com.mobiledev.imagefilters.ViewModels.EditViewModel;
 import com.mobiledev.imagefilters.databinding.ActivityEditImageBinding;
+import org.jetbrains.annotations.NotNull;
 import java.io.FileNotFoundException;
 import java.util.*;
 import ja.burhanrashid52.photoeditor.*;
@@ -38,7 +37,7 @@ public class EditImageActivity extends BaseActivity implements FilterListener {
 
     @Nullable
     @VisibleForTesting
-    Uri saveImageUri;
+    private Uri saveImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,39 +106,71 @@ public class EditImageActivity extends BaseActivity implements FilterListener {
                 ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PERMISSION_GRANTED;
         if (hasStoragePermission || isSdkHigherThan28()) {
             showLoading(getString(R.string.saving));
-            fileSaveHelper.createFile(filename, (fileCreated, filePath, error, uri) -> {
-                if (fileCreated) {
-                    SaveSettings saveSettings = new SaveSettings.Builder()
-                            .setClearViewsEnabled(true)
-                            .setTransparencyEnabled(true)
-                            .build();
-
-                    photoEditor.saveAsFile(filePath, saveSettings, new PhotoEditor.OnSaveListener() {
-                        @Override
-                        public void onSuccess(@NonNull String imagePath) {
-                            fileSaveHelper.notifyThatFileIsNowPubliclyAvailable(getContentResolver());
-                            hideLoading();
-                            showSnackBar("Image Saved Successfully");
-                            saveImageUri = uri;
-                            editBinding.imagePreview.getSource().setImageURI(saveImageUri);
-                        }
-
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            hideLoading();
-                            showSnackBar("Failed to save Image");
-                        }
-                    });
-
-                } else {
-                    hideLoading();
-                    showSnackBar(error);
-                }
-            });
+            saveImageImp(filename);
         } else {
-            requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            onHasNotStoragePermission();
         }
     }
+
+    private void saveImageImp(String filename){
+        fileSaveHelper.createFile(filename, (fileCreated, filePath, error, uri) -> {
+            if (fileCreated) {
+                SaveSettings saveSettings = new SaveSettings.Builder()
+                        .setClearViewsEnabled(true)
+                        .setTransparencyEnabled(true)
+                        .build();
+
+                saveAsFileImp(filePath, saveSettings, uri);
+
+            } else {
+                onFileNotCreated(error);
+            }
+        });
+    }
+
+    private void onHasNotStoragePermission(){
+        requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        this.saveImage();
+    }
+
+    private void onFileNotCreated(String error){
+        hideLoading();
+        showToast(error);
+    }
+
+
+    private void saveAsFileImp(String filePath, SaveSettings saveSettings, Uri uri){
+        final boolean hasStoragePermission =
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PERMISSION_GRANTED;
+        if(hasStoragePermission){
+            photoEditor.saveAsFile(filePath, saveSettings, new PhotoEditor.OnSaveListener() {
+                @Override
+                public void onSuccess(@NonNull String imagePath) {
+                    saveAsFileOnSuccess(imagePath, uri);
+                }
+
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    saveAsFileOnFailure();
+                }
+        });
+        }
+    }
+
+    private void saveAsFileOnSuccess(@NotNull String imagePath, @NotNull Uri uri){
+        fileSaveHelper.notifyThatFileIsNowPubliclyAvailable(getContentResolver());
+        hideLoading();
+        showToast(getString(R.string.image_saved_successfully));
+        saveImageUri = uri;
+        editBinding.imagePreview.getSource().setImageURI(saveImageUri);
+    }
+
+    private void saveAsFileOnFailure(){
+        hideLoading();
+        showToast(getString(R.string.faided_to_save_image));
+    }
+
+
 
 
 }

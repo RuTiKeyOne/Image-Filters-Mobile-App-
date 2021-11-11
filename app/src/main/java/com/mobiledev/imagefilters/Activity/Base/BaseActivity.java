@@ -3,16 +3,12 @@ package com.mobiledev.imagefilters.Activity.Base;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-import com.google.android.material.snackbar.Snackbar;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -25,7 +21,7 @@ public class BaseActivity extends AppCompatActivity {
         initializationComponentsView();
     }
 
-    private void initializationComponentsView(){
+    private void initializationComponentsView() {
         progressDialog = new ProgressDialog(this);
     }
 
@@ -53,13 +49,7 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected void showSnackBar(@NonNull String message) {
-        View view = findViewById(android.R.id.content);
-        if (view != null) {
-            Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        }
+    protected void showToast(@NonNull String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
-
 }

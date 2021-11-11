@@ -7,4 +7,6 @@
     <string name="apply_filter">Apply Filter</string>
     <string name="filters">Filters</string>
     <string name="saving">Saving...</string>
+    <string name="image_saved_successfully">Image Saved Successfully</string>
+    <string name="faided_to_save_image">Failed to save Image</string>
 </resources>
