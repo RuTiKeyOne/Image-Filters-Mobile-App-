@@ -8,6 +8,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainHeaderLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".Activity.MainActivity">
@@ -20,15 +21,16 @@
             android:src="@drawable/landing_background_image" />
 
         <View
+            android:id="@+id/mainLandingBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/landing_background" />
 
         <TextView
-            android:id="@+id/textTitle"
+            android:id="@+id/mainTextTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/textSubtitle"
+            app:layout_constraintBottom_toTopOf="@id/mainTextSubtitle"
             android:text="@string/image_filters"
             android:textColor="@color/white"
             android:textSize="@dimen/_20ssp"
@@ -38,7 +40,7 @@
             android:fontFamily="@font/poppins_bold"/>
 
         <TextView
-            android:id="@+id/textSubtitle"
+            android:id="@+id/mainTextSubtitle"
             android:text="@string/let_s_create_something_new"
             android:textColor="@color/white"
             android:includeFontPadding="false"

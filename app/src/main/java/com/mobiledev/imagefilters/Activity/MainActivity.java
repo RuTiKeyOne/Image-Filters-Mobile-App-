@@ -1,6 +1,7 @@
 package com.mobiledev.imagefilters.Activity;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.databinding.DataBindingUtil;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +11,9 @@ import com.mobiledev.imagefilters.databinding.ActivityMainBinding;
 
 public class MainActivity extends BaseActivity {
 
-    private ActivityMainBinding mainBinding;
-    private final int REQUEST_CODE_PICK_IMAGE = 1;
-    public static final String KEY_IMAGE_URI = "imageUri";
+    @VisibleForTesting ActivityMainBinding mainBinding;
+    final int REQUEST_CODE_PICK_IMAGE = 1;
+    static final String KEY_IMAGE_URI = "imageUri";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,8 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void initializationComponentsView(){
+    @VisibleForTesting
+    void initializationComponentsView(){
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
     }
 
