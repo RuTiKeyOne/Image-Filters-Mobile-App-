@@ -1,7 +1,16 @@
 package com.mobiledev.imagefilters.Activity;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+
+import static com.mobiledev.imagefilters.Helper.FileSaveHelper.isSdkHigherThan28;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
+import android.Manifest;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,7 +34,11 @@ public class EditImageActivity extends BaseActivity implements FilterListener {
     private static List<Filter> photoFilters = new ArrayList<>();
     private FilterViewAdapter filterViewAdapter;
     private PhotoEditor photoEditor;
-    private FileSaveHelper saveHelper;
+    private FileSaveHelper fileSaveHelper;
+
+    @Nullable
+    @VisibleForTesting
+    Uri saveImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +54,7 @@ public class EditImageActivity extends BaseActivity implements FilterListener {
         editViewModel = new ViewModelProvider(this).get(EditViewModel.class);
         photoFilters = FilterData.getPhotoFilters();
         filterViewAdapter = new FilterViewAdapter(this, photoFilters);
-        saveHelper = new FileSaveHelper();
+        fileSaveHelper = new FileSaveHelper(this);
     }
 
     private void initializationComponentsView() {
@@ -89,10 +102,42 @@ public class EditImageActivity extends BaseActivity implements FilterListener {
     }
 
     private void saveImage() {
-        final String fileName = System.currentTimeMillis() + ".png";
-        if (isHasStoragePermissionOrIsSdkHigherThan28()) {
+        final String filename = System.currentTimeMillis() + ".png";
+        final boolean hasStoragePermission =
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PERMISSION_GRANTED;
+        if (hasStoragePermission || isSdkHigherThan28()) {
             showLoading(getString(R.string.saving));
+            fileSaveHelper.createFile(filename, (fileCreated, filePath, error, uri) -> {
+                if (fileCreated) {
+                    SaveSettings saveSettings = new SaveSettings.Builder()
+                            .setClearViewsEnabled(true)
+                            .setTransparencyEnabled(true)
+                            .build();
 
+                    photoEditor.saveAsFile(filePath, saveSettings, new PhotoEditor.OnSaveListener() {
+                        @Override
+                        public void onSuccess(@NonNull String imagePath) {
+                            fileSaveHelper.notifyThatFileIsNowPubliclyAvailable(getContentResolver());
+                            hideLoading();
+                            showSnackBar("Image Saved Successfully");
+                            saveImageUri = uri;
+                            editBinding.imagePreview.getSource().setImageURI(saveImageUri);
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            hideLoading();
+                            showSnackBar("Failed to save Image");
+                        }
+                    });
+
+                } else {
+                    hideLoading();
+                    showSnackBar(error);
+                }
+            });
+        } else {
+            requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
     }
 

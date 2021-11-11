@@ -1,16 +1,18 @@
 package com.mobiledev.imagefilters.Activity.Base;
 
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static com.mobiledev.imagefilters.Helper.FileSaveHelper.isSdkHigherThan28;
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.google.android.material.snackbar.Snackbar;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -25,19 +27,6 @@ public class BaseActivity extends AppCompatActivity {
 
     private void initializationComponentsView(){
         progressDialog = new ProgressDialog(this);
-    }
-
-    protected boolean isHasStoragePermissionOrIsSdkHigherThan28() {
-        if (isHasStoragePermission() || isSdkHigherThan28()) {
-            return true;
-        } else {
-            requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            return false;
-        }
-    }
-
-    protected boolean isHasStoragePermission() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PERMISSION_GRANTED;
     }
 
     protected boolean requestPermission(String permission) {
@@ -61,6 +50,15 @@ public class BaseActivity extends AppCompatActivity {
     protected void hideLoading() {
         if (progressDialog != null) {
             progressDialog.dismiss();
+        }
+    }
+
+    protected void showSnackBar(@NonNull String message) {
+        View view = findViewById(android.R.id.content);
+        if (view != null) {
+            Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }
     }
 
