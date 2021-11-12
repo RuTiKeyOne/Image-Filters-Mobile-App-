@@ -38,7 +38,7 @@ public class EditImageActivity extends BaseActivity implements FilterListener {
     ActivityEditImageBinding editBinding;
     public EditViewModel editViewModel;
     @VisibleForTesting
-    static List<Filter> photoFilters = new ArrayList<>();
+    List<Filter> photoFilters = new ArrayList<>();
     @VisibleForTesting
     FilterViewAdapter filterViewAdapter;
     @VisibleForTesting
@@ -49,6 +49,35 @@ public class EditImageActivity extends BaseActivity implements FilterListener {
     @Nullable
     @VisibleForTesting
     private Uri saveImageUri;
+
+    public ActivityEditImageBinding getEditBinding() {
+        return editBinding;
+    }
+
+    public EditViewModel getEditViewModel() {
+        return editViewModel;
+    }
+
+    public List<Filter> getPhotoFilters() {
+        return photoFilters;
+    }
+
+    public FilterViewAdapter getFilterViewAdapter() {
+        return filterViewAdapter;
+    }
+
+    public PhotoEditor getPhotoEditor() {
+        return photoEditor;
+    }
+
+    public FileSaveHelper getFileSaveHelper() {
+        return fileSaveHelper;
+    }
+
+    @Nullable
+    public Uri getSaveImageUri() {
+        return saveImageUri;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

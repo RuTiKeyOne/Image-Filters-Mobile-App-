@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -13,7 +14,7 @@ import androidx.core.content.ContextCompat;
 public class BaseActivity extends AppCompatActivity {
 
     public static final int READ_WRITE_STORAGE = 52;
-    private ProgressDialog progressDialog;
+    @VisibleForTesting ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -21,7 +22,8 @@ public class BaseActivity extends AppCompatActivity {
         initializationComponentsView();
     }
 
-    private void initializationComponentsView() {
+    @VisibleForTesting
+    void initializationComponentsView() {
         progressDialog = new ProgressDialog(this);
     }
 
