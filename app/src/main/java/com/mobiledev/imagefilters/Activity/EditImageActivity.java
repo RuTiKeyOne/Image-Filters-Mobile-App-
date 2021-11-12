@@ -2,17 +2,20 @@ package com.mobiledev.imagefilters.Activity;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.mobiledev.imagefilters.Helper.FileSaveHelper.isSdkHigherThan28;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
+
 import android.Manifest;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+
 import com.mobiledev.imagefilters.Activity.Base.BaseActivity;
 import com.mobiledev.imagefilters.Adapter.FilterViewAdapter;
 import com.mobiledev.imagefilters.Helper.FileSaveHelper;
@@ -21,19 +24,27 @@ import com.mobiledev.imagefilters.Model.*;
 import com.mobiledev.imagefilters.R;
 import com.mobiledev.imagefilters.ViewModels.EditViewModel;
 import com.mobiledev.imagefilters.databinding.ActivityEditImageBinding;
+
 import org.jetbrains.annotations.NotNull;
+
 import java.io.FileNotFoundException;
 import java.util.*;
+
 import ja.burhanrashid52.photoeditor.*;
 
 public class EditImageActivity extends BaseActivity implements FilterListener {
 
-    private ActivityEditImageBinding editBinding;
-    private EditViewModel editViewModel;
-    private static List<Filter> photoFilters = new ArrayList<>();
-    private FilterViewAdapter filterViewAdapter;
-    private PhotoEditor photoEditor;
-    private FileSaveHelper fileSaveHelper;
+    @VisibleForTesting
+    ActivityEditImageBinding editBinding;
+    public EditViewModel editViewModel;
+    @VisibleForTesting
+    static List<Filter> photoFilters = new ArrayList<>();
+    @VisibleForTesting
+    FilterViewAdapter filterViewAdapter;
+    @VisibleForTesting
+    PhotoEditor photoEditor;
+    @VisibleForTesting
+    FileSaveHelper fileSaveHelper;
 
     @Nullable
     @VisibleForTesting
@@ -48,15 +59,16 @@ public class EditImageActivity extends BaseActivity implements FilterListener {
         displayImagePreviewFromTry();
     }
 
-
-    private void initializationComponents() {
+    @VisibleForTesting
+    void initializationComponents() {
         editViewModel = new ViewModelProvider(this).get(EditViewModel.class);
         photoFilters = FilterData.getPhotoFilters();
         filterViewAdapter = new FilterViewAdapter(this, photoFilters);
         fileSaveHelper = new FileSaveHelper(this);
     }
 
-    private void initializationComponentsView() {
+    @VisibleForTesting
+    void initializationComponentsView() {
         editBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit_image);
         editBinding.setIsLoading(true);
         editBinding.filtersRecycleView.setAdapter(filterViewAdapter);
@@ -77,7 +89,8 @@ public class EditImageActivity extends BaseActivity implements FilterListener {
         editBinding.imageSave.setOnClickListener(v -> saveImage());
     }
 
-    private void displayImagePreviewFromTry() {
+    @VisibleForTesting
+    void displayImagePreviewFromTry() {
         try {
             displayImagePreview();
         } catch (FileNotFoundException e) {
@@ -112,7 +125,7 @@ public class EditImageActivity extends BaseActivity implements FilterListener {
         }
     }
 
-    private void saveImageImp(String filename){
+    private void saveImageImp(String filename) {
         fileSaveHelper.createFile(filename, (fileCreated, filePath, error, uri) -> {
             if (fileCreated) {
                 SaveSettings saveSettings = new SaveSettings.Builder()
@@ -128,21 +141,21 @@ public class EditImageActivity extends BaseActivity implements FilterListener {
         });
     }
 
-    private void onHasNotStoragePermission(){
+    private void onHasNotStoragePermission() {
         requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         this.saveImage();
     }
 
-    private void onFileNotCreated(String error){
+    private void onFileNotCreated(String error) {
         hideLoading();
         showToast(error);
     }
 
 
-    private void saveAsFileImp(String filePath, SaveSettings saveSettings, Uri uri){
+    private void saveAsFileImp(String filePath, SaveSettings saveSettings, Uri uri) {
         final boolean hasStoragePermission =
                 ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PERMISSION_GRANTED;
-        if(hasStoragePermission){
+        if (hasStoragePermission) {
             photoEditor.saveAsFile(filePath, saveSettings, new PhotoEditor.OnSaveListener() {
                 @Override
                 public void onSuccess(@NonNull String imagePath) {
@@ -153,11 +166,11 @@ public class EditImageActivity extends BaseActivity implements FilterListener {
                 public void onFailure(@NonNull Exception exception) {
                     saveAsFileOnFailure();
                 }
-        });
+            });
         }
     }
 
-    private void saveAsFileOnSuccess(@NotNull String imagePath, @NotNull Uri uri){
+    private void saveAsFileOnSuccess(@NotNull String imagePath, @NotNull Uri uri) {
         fileSaveHelper.notifyThatFileIsNowPubliclyAvailable(getContentResolver());
         hideLoading();
         showToast(getString(R.string.image_saved_successfully));
@@ -165,12 +178,10 @@ public class EditImageActivity extends BaseActivity implements FilterListener {
         editBinding.imagePreview.getSource().setImageURI(saveImageUri);
     }
 
-    private void saveAsFileOnFailure(){
+    private void saveAsFileOnFailure() {
         hideLoading();
         showToast(getString(R.string.faided_to_save_image));
     }
-
-
 
 
 }

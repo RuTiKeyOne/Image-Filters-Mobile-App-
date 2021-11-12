@@ -3,11 +3,15 @@ package com.mobiledev.imagefilters.ViewModels;
 import android.app.Application;
 import android.graphics.Bitmap;
 import android.net.Uri;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.AndroidViewModel;
+
 import com.mobiledev.imagefilters.Repository.EditImageRepositoryImp;
 
 public class EditViewModel extends AndroidViewModel {
+    @VisibleForTesting
     EditImageRepositoryImp editImageRepository;
 
     public EditViewModel(@NonNull Application application) {
@@ -15,7 +19,7 @@ public class EditViewModel extends AndroidViewModel {
         editImageRepository = new EditImageRepositoryImp(application.getApplicationContext());
     }
 
-    public Bitmap prepareImageView(Uri imageUri){
+    public Bitmap prepareImageView(Uri imageUri) {
         return editImageRepository.prepareImagePreview(imageUri);
     }
 
