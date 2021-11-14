@@ -3,6 +3,7 @@ package com.mobiledev.imagefilters.Activity.Base;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,7 +28,7 @@ public class BaseActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
     }
 
-    protected boolean requestPermission(String permission) {
+    public boolean requestPermission(String permission) {
         boolean isGranted = ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
         if (!isGranted) {
             ActivityCompat.requestPermissions(
@@ -38,7 +39,7 @@ public class BaseActivity extends AppCompatActivity {
         return isGranted;
     }
 
-    protected void showLoading(@NonNull String message) {
+    public void showLoading(@NonNull String message) {
         progressDialog.setMessage(message);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setCancelable(false);

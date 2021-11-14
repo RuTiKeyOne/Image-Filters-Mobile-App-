@@ -45,7 +45,6 @@ public class EditImageActivityTest {
             public void run() {
                 editTestRule.getActivity().initializationComponentsView();
                 assertNotNull(editTestRule.getActivity().editBinding);
-                assertTrue(editTestRule.getActivity().editBinding.getIsLoading());
                 assertNotNull(editTestRule.getActivity().editBinding.filtersRecycleView.getAdapter());
                 assertNotNull(editTestRule.getActivity().photoEditor);
             }

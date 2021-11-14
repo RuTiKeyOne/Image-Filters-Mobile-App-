@@ -99,7 +99,6 @@ public class EditImageActivity extends BaseActivity implements FilterListener {
     @VisibleForTesting
     void initializationComponentsView() {
         editBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit_image);
-        editBinding.setIsLoading(true);
         editBinding.filtersRecycleView.setAdapter(filterViewAdapter);
         photoEditor = new PhotoEditor.Builder(this, editBinding.imagePreview).build();
         photoEditor.setFilterEffect(PhotoFilter.NONE);
@@ -131,7 +130,6 @@ public class EditImageActivity extends BaseActivity implements FilterListener {
         Uri imageUri = getIntent().getParcelableExtra(MainActivity.KEY_IMAGE_URI);
         if (imageUri != null) {
             Bitmap imageBitmap = editViewModel.prepareImageView(imageUri);
-            editBinding.setIsLoading(false);
             editBinding.imagePreview.getSource().setImageBitmap(imageBitmap);
             editBinding.imagePreview.setVisibility(View.VISIBLE);
         }
