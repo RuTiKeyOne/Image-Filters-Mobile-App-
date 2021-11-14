@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Image Filters</string>
+    <string name="saved_images">Saved Images</string>
+    <string name="edit_new_image">Edit image</string>
+    <string name="let_s_create_something_new">Let\'s create something new</string>
+    <string name="image_filters">Image Filters</string>
+    <string name="apply_filter">Apply Filter</string>
+    <string name="filters">Filters</string>
+    <string name="saving">Saving...</string>
+    <string name="image_saved_successfully">Image Saved Successfully</string>
+    <string name="faided_to_save_image">Failed to save Image</string>
+</resources>
