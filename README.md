@@ -7,7 +7,7 @@ Image Filters is an application that allows you to apply various filters to imag
 <p align="center">
   <img src="https://i.ibb.co/4Py3yVD/image.png" width="200"/>
    <img src="https://i.ibb.co/DVbfRrp/image.png" width="200"/>
-  <img src="https://i.ibb.co/hF0LKQC/image.png" width="200"/>
+  <img src="https://i.ibb.co/8Ptc2mm/2021-11-19-210434.png" width="200"/>
   <img src="https://i.ibb.co/s6cY0rt/image.png" width="200"/>
 </p>
 
